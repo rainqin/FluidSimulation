@@ -6,7 +6,7 @@
 using namespace std;
 
 #define M_PI 3.1415926
-#define myScope 0.75
+#define myScope 3
 
 GLfloat viewX = 0;
 GLfloat xrotate = 0, yrotate = 0;
@@ -19,9 +19,9 @@ GLboolean mouserdown = GL_FALSE;
 GLboolean mouseldown = GL_FALSE;
 GLboolean mousemdown = GL_FALSE;
 
-int wid = 4;
-int len = 4;
-int hei = 4;
+int wid = 5;
+int len = 5;
+int hei = 5;
 int particleNum = wid * len * hei;
 int mousex, mousey;
 Camera* camera;

@@ -3,9 +3,9 @@
 #define FACTOR	945/32/3.1415926
 #define density0 1000
 #define my_k 3
-#define my_u 3.5
-#define my_sigma 0.0728
-#define my_g 9.8
+#define my_u 50
+#define my_sigma 0.07
+#define my_g 98000
 
 Field::Field(Particle* particle, float scope, int num) {
 	p = particle;
@@ -18,6 +18,13 @@ Field::~Field() {
 }
 
 void Field::CalculateField() {
+	for (int i = 0; i < particleNum; i++) {
+		p[i].force = make_vector(0.0, 0.0, 0.0);
+		p[i].density = 0;
+		p[i].csGradient = make_vector(0.0, 0.0, 0.0);
+		p[i].csLaplaceian = 0;
+		p[i].inFieldCount = 0;
+	}
 	for (int i = 0; i < particleNum - 1; i++) {
 		for (int j = i + 1; j < particleNum; j++) {
 			if (length(p[i].position - p[j].position) < fieldScope) {
@@ -41,19 +48,19 @@ void Field::CalculateField() {
 	}
 
 	for (int i = 0; i < particleNum; i++) {
-		for (int j = 0; j < p[i].inFieldCount; j++) {
-			Particle q = p[p[i].inField[j].index];
+		for (int j = 0; j < p[i].inFieldCount - 1; j++) {
+			//Particle q = p[p[i].inField[j].index];
 			double pressi = my_k * (p[i].density - density0);
-			double pressj = my_k * (q.density - density0);
+			double pressj = my_k * (p[p[i].inField[j].index].density - density0);
 
-			p[i].force += q.mass * (pressi + pressj) / 2 / q.density * p[i].inField[j].Wgradient;  //pressure
-			p[i].force += my_u * q.mass * (q.velocity - p[i].velocity) / q.density * p[i].inField[j].Wlaplaceian; //viscosity
+			p[i].force -= p[p[i].inField[j].index].mass * (pressi + pressj) / 2 / p[p[i].inField[j].index].density * p[i].inField[j].Wgradient;  //pressure
+			p[i].force += my_u * p[p[i].inField[j].index].mass * (p[p[i].inField[j].index].velocity - p[i].velocity) / p[p[i].inField[j].index].density * p[i].inField[j].Wlaplaceian; //viscosity
 			
-			p[i].csLaplaceian += q.mass / q.density * p[i].inField[j].Wlaplaceian;
-			p[i].csGradient += q.mass / q.density * p[i].inField[j].Wgradient; 
+			p[i].csLaplaceian += p[p[i].inField[j].index].mass / p[p[i].inField[j].index].density * p[i].inField[j].Wlaplaceian;
+			p[i].csGradient += p[p[i].inField[j].index].mass / p[p[i].inField[j].index].density * p[i].inField[j].Wgradient; 
 		}
 		p[i].force += -my_sigma * p[i].csLaplaceian * normalize(p[i].csGradient); //surface tension
-		p[i].force += my_g * make_vector<float>(0.0, 1.0, 0.0);                   //gravity
+		p[i].force -= my_g * make_vector<float>(0.0, 1.0, 0.0);                   //gravity
 	}
 }
 
