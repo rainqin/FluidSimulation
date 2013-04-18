@@ -6,7 +6,7 @@
 using namespace std;
 
 #define M_PI 3.1415926
-#define scope 0.75
+#define myScope 0.75
 
 GLfloat viewX = 0;
 GLfloat xrotate = 0, yrotate = 0;
@@ -31,7 +31,7 @@ Field* field;
 void init(void) {
 	camera = new Camera(loc_init, target_init, up_init);
 	particles = new Particle[particleNum]();
-	field = new Field(particles, scope, particleNum);
+	field = new Field(particles, myScope, particleNum);
 
 	for (int i = 0; i < len; i++) {
 		for (int j= 0; j < wid; j++) {

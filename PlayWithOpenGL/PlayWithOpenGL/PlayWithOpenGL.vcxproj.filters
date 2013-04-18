@@ -63,7 +63,7 @@
     <ClInclude Include="field.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Force.h">
+    <ClInclude Include="myField.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -81,9 +81,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="field.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Force.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

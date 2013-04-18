@@ -1,4 +1,6 @@
 #include "Particle.h"
+#include <gl\glut.h>
+
 #define delta_t 0.001
 #define damping 0.3
 

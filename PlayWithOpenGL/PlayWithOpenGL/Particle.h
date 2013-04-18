@@ -1,12 +1,14 @@
 #include "Vector\Vector.hpp"
-#include <gl\glut.h>
 
-struct myField {
+#ifndef field_flag 
+#define field_flag
+struct myField{
 	int index;
 	Vector3f Wgradient;
 	double Wlaplaceian;
 	double W;
 };
+
 
 class Particle {
 public:
@@ -38,3 +40,4 @@ public:
 	void clearInField();
 	void applyForce();
 };
+#endif 
