@@ -1,16 +1,28 @@
 #include "Vector\Vector.hpp"
 #include <gl\glut.h>
 
+struct myField {
+	int index;
+	Vector3f Wgradient;
+	double Wlaplaceian;
+	double W;
+};
+
 class Particle {
-private:
+public:
+	int pNum;
+	float mass;
+	double density;
+	Vector3f acc;
 	Vector3f position;
 	Vector3f velocity;
-	Vector3f pressure;
+	Vector3f force;
+	Vector3f csGradient;
+	double csLaplaceian;
 
-public:
-	Particle(Vector3f position, Vector3f velocity, Vector3f pressure);
-	Particle(Vector3f position, Vector3f velocity);
-	Particle(Vector3f position);
+	myField* inField;
+	int inFieldCount;
+	
 	Particle();
 	~Particle();
 
@@ -23,4 +35,6 @@ public:
 	Vector3f getPressure();
 
 	void draw();
+	void clearInField();
+	void applyForce();
 };

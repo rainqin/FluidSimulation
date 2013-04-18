@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "fluidSimulation.h"
 #include "Particle.h"
+#include "field.h"
 
 using namespace std;
 
 #define M_PI 3.1415926
+#define scope 0.75
 
 GLfloat viewX = 0;
 GLfloat xrotate = 0, yrotate = 0;
@@ -22,15 +24,19 @@ int len = 4;
 int hei = 4;
 int particleNum = wid * len * hei;
 int mousex, mousey;
-Camera* camera = new Camera(loc_init, target_init, up_init);
-Particle* particles = new Particle[particleNum]();
+Camera* camera;
+Particle* particles;
+Field* field;
 
 void init(void) {
+	camera = new Camera(loc_init, target_init, up_init);
+	particles = new Particle[particleNum]();
+	field = new Field(particles, scope, particleNum);
 
 	for (int i = 0; i < len; i++) {
 		for (int j= 0; j < wid; j++) {
 			for (int z = 0; z < hei; z++) {
-				particles[i * len * wid + j * wid + z].setPosition(make_vector<float>(i * 0.5, z * 0.5, j* 0.5)); 
+				particles[i * len * wid + j * wid + z].position = make_vector<float>(i * 0.5, z * 0.5, j* 0.5); 
 			}
 		}
 	}
@@ -145,7 +151,10 @@ void draw() {
 	glColor3f(0.0, 0.0, 0.0);
 	glutWireCube(5);
 
+	field->CalculateField();
+
 	for (int i = 0; i < particleNum; i++) {
+		particles[i].applyForce();
 		particles[i].draw();
 	}
 }
