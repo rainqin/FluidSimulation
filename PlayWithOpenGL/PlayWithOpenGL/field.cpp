@@ -1,11 +1,11 @@
 #include "field.h"
 #include <math.h>
 #define FACTOR	945/32/3.1415926
-#define density0 1000
-#define my_k 3
-#define my_u 50
-#define my_sigma 0.07
-#define my_g 98000
+#define density0 998.29
+#define my_k 3 
+#define my_u 2
+#define my_sigma 0.00725
+#define my_g 9.8 * 10
 
 Field::Field(Particle* particle, float scope, int num) {
 	p = particle;
@@ -53,8 +53,8 @@ void Field::CalculateField() {
 			double pressi = my_k * (p[i].density - density0);
 			double pressj = my_k * (p[p[i].inField[j].index].density - density0);
 
-			p[i].force -= p[p[i].inField[j].index].mass * (pressi + pressj) / 2 / p[p[i].inField[j].index].density * p[i].inField[j].Wgradient;  //pressure
-			p[i].force += my_u * p[p[i].inField[j].index].mass * (p[p[i].inField[j].index].velocity - p[i].velocity) / p[p[i].inField[j].index].density * p[i].inField[j].Wlaplaceian; //viscosity
+			p[i].force += p[p[i].inField[j].index].mass * (pressi + pressj) / 2 / p[p[i].inField[j].index].density * p[i].inField[j].Wgradient;  //pressure
+			//p[i].force += my_u * p[p[i].inField[j].index].mass * (p[p[i].inField[j].index].velocity - p[i].velocity) / p[p[i].inField[j].index].density * p[i].inField[j].Wlaplaceian; //viscosity
 			
 			p[i].csLaplaceian += p[p[i].inField[j].index].mass / p[p[i].inField[j].index].density * p[i].inField[j].Wlaplaceian;
 			p[i].csGradient += p[p[i].inField[j].index].mass / p[p[i].inField[j].index].density * p[i].inField[j].Wgradient; 

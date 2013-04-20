@@ -6,7 +6,7 @@
 using namespace std;
 
 #define M_PI 3.1415926
-#define myScope 3
+#define myScope 0.5
 
 GLfloat viewX = 0;
 GLfloat xrotate = 0, yrotate = 0;
@@ -157,6 +157,7 @@ void draw() {
 		particles[i].applyForce();
 		particles[i].draw();
 	}
+	glutPostRedisplay();
 }
 
 
@@ -174,7 +175,6 @@ int _tmain(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(MouseFunc);    
 	glutMotionFunc(MouseMotion); 
-
 	glutMainLoop();
 
 	release();

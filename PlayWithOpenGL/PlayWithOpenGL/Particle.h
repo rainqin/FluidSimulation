@@ -22,6 +22,13 @@ public:
 	Vector3f csGradient;
 	double csLaplaceian;
 
+	bool flagX1;
+	bool flagX2;
+	bool flagY1;
+	bool flagY2;
+	bool flagZ1;
+	bool flagZ2;
+
 	myField* inField;
 	int inFieldCount;
 	

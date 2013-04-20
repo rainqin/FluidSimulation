@@ -2,7 +2,7 @@
 #include <gl\glut.h>
 #include <iostream>
 
-#define delta_t 0.0001
+#define delta_t 0.0005
 #define damping 0.3
 
 Particle::Particle(){
@@ -30,7 +30,7 @@ void Particle::draw() {
 	GLUquadricObj* quadratic;
 	quadratic =gluNewQuadric();  
 	glTranslatef(position.x, position.y, position.z); 	 
-	gluSphere(quadratic, 0.25, 200, 160);   /* draw sun */
+	gluSphere(quadratic, 0.25, 200, 160);  
 	glPopMatrix();
 }
 
@@ -41,39 +41,50 @@ void Particle::clearInField() {
 }
 
 void Particle::applyForce() {
-	float constraint = 3;
-	
-	acc = force / mass;
+	float constraint = 1.5;
+	Vector3f up = make_vector<float>(0.0, 1.0, 0.0);
 
+	acc = force / mass;
 	velocity += acc * delta_t;
+	
+	
 	//std::cout<<"Prev: "<<position<<std::endl;
 	position += velocity * delta_t;
 
 	if (position.y >constraint) {
-		//position.y = constraint;
+		position.y = constraint;
 		velocity.y = -damping * velocity.y;
+		acc.y = -acc.y;
 	}
 
 	if (position.y < 0) {
-		//position.y = 0;
+		position.y = 0;
 		velocity.y = -damping * velocity.y;
+		acc.y = -acc.y;
 	}
+
 	if (position.x < -constraint) {
-		//position.x = -constraint;
-		velocity.x = -damping * velocity.x;
+		position.x = -constraint;
+		velocity = damping * cross_product(velocity, up);
+		acc = cross_product(acc, up);
 	}
+
 	if (position.x > constraint) {
-		//position.x = constraint;
-		velocity.x = -damping * velocity.x;
+		position.x = constraint;
+		velocity = damping * cross_product(velocity, up);
+		acc = cross_product(acc, up);
 	} 
 	if (position.z < -constraint) {
 		//std::cout<<"Prev: "<<position<<std::endl;
-		//position.z = -constraint;
-		velocity.z = -damping * velocity.z;
+		position.z = -constraint;
+		velocity = damping * cross_product(velocity, up);
+		acc = cross_product(acc, up);
 		//std::cout<<"After: "<<position<<std::endl;
 	} 
 	if (position.z > constraint) {
-		//position.z = constraint;
-		velocity.z = -damping * velocity.z;
+		position.z = constraint;
+		velocity = damping * cross_product(velocity, up);
+		acc = cross_product(acc, up);
 	}
+
 }
