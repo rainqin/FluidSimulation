@@ -43,14 +43,17 @@ void Particle::clearInField() {
 void Particle::applyForce() {
 	float constraint = 1.5;
 	Vector3f up = make_vector<float>(0.0, 1.0, 0.0);
+	//Vector3f initial_acceleration=acc;
+	//acc = force / mass;
 
-	acc = force / mass;
-	velocity += acc * delta_t;
+	
 	
 	
 	//std::cout<<"Prev: "<<position<<std::endl;
-	position += velocity * delta_t;
-
+	Vector3f newPosition = position + velocity * delta_t+acc*delta_t*delta_t;
+	Vector3f newVelocity = (newPosition - position)/delta_t;
+	position=newPosition;
+	velocity=newVelocity;
 	if (position.y >constraint) {
 		position.y = constraint;
 		velocity.y = -damping * velocity.y;

@@ -62,6 +62,8 @@ void Field::CalculateField() {
 		p[i].force += -my_sigma * p[i].csLaplaceian * normalize(p[i].csGradient); //surface tension
 		p[i].force -= my_g * make_vector<float>(0.0, 1.0, 0.0);                   //gravity
 	}
+	for(int i=0;i<particleNum;i++)
+		p[i].acc=p[i].force/p[i].mass;
 }
 
 Vector3f Field::CalculateWgradient(Vector3f r, float h) {
