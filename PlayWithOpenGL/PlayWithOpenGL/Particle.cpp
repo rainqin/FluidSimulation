@@ -2,13 +2,13 @@
 #include <gl\glut.h>
 #include <iostream>
 
-#define delta_t 0.0005
+#define delta_t 0.001
 #define damping 0.3
 
 Particle::Particle(){
 	inFieldCount = 0;
 	pNum = 125;
-	mass = 0.02;
+	mass = 1.0;
 	force = make_vector(0.0, 0.0, 0.0);
 	acc = make_vector(0.0, 0.0, 0.0);
 	velocity = make_vector(0.0, 0.0, 0.0);
@@ -45,9 +45,6 @@ void Particle::applyForce() {
 	Vector3f up = make_vector<float>(0.0, 1.0, 0.0);
 	//Vector3f initial_acceleration=acc;
 	//acc = force / mass;
-
-	
-	
 	
 	//std::cout<<"Prev: "<<position<<std::endl;
 	Vector3f newPosition = position + velocity * delta_t+acc*delta_t*delta_t;

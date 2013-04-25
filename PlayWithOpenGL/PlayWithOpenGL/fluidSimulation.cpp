@@ -6,7 +6,7 @@
 using namespace std;
 
 #define M_PI 3.1415926
-#define myScope 0.5
+#define myScope 1.0
 
 GLfloat viewX = 0;
 GLfloat xrotate = 0, yrotate = 0;
@@ -19,6 +19,7 @@ GLboolean mouserdown = GL_FALSE;
 GLboolean mouseldown = GL_FALSE;
 GLboolean mousemdown = GL_FALSE;
 
+int space = 2.0;
 int wid = 5;
 int len = 5;
 int hei = 5;
@@ -29,6 +30,7 @@ Particle* particles;
 Field* field;
 
 void init(void) {
+
 	camera = new Camera(loc_init, target_init, up_init);
 	particles = new Particle[particleNum]();
 	field = new Field(particles, myScope, particleNum);
@@ -36,7 +38,7 @@ void init(void) {
 	for (int i = 0; i < len; i++) {
 		for (int j= 0; j < wid; j++) {
 			for (int z = 0; z < hei; z++) {
-				particles[i * len * wid + j * wid + z].position = make_vector<float>(i * 0.5, z * 0.5, j* 0.5); 
+				particles[i * len * wid + j * wid + z].position = make_vector<float>(i * space, z * space, j* space); 
 			}
 		}
 	}
@@ -151,10 +153,15 @@ void draw() {
 	glColor3f(0.0, 0.0, 0.0);
 	glutWireCube(5);
 
-	field->CalculateField();
+	for (int i = 0; i < 1; i++) {
+		field->CalculateField();
+
+		for (int i = 0; i < particleNum; i++) {
+			particles[i].applyForce();
+		}
+	}
 
 	for (int i = 0; i < particleNum; i++) {
-		particles[i].applyForce();
 		particles[i].draw();
 	}
 	glutPostRedisplay();
